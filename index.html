@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -33,12 +32,12 @@
         <header class="theme-box p-4 rounded-xl flex justify-between items-center flex-wrap gap-4 relative">
             <h1 class="text-xl font-bold theme-title">📿 Zikr & Namaaz Portal</h1>
             <div class="flex items-center gap-2 flex-wrap">
-                <!-- Custom 25 Themes Popup Button -->
+                <!-- Custom Scrollable 25 Themes Box -->
                 <div class="relative">
-                    <button onclick="toggleThemeDropdown()" id="themeBtn" class="bg-slate-900 border text-xs rounded px-3 py-2 text-white outline-none flex items-center gap-2 border-[var(--primary)] shadow">
+                    <button onclick="toggleThemeModal()" id="themeBtn" class="bg-slate-900 border text-xs rounded px-3 py-2 text-white outline-none flex items-center gap-2 border-[var(--primary)] shadow font-semibold">
                         🎨 <span id="currentThemeName">Select Theme (25)</span> ▼
                     </button>
-                    <div id="themeDropdown" class="hidden absolute right-0 mt-2 w-64 bg-slate-950 border border-[var(--primary)] rounded-lg shadow-2xl max-h-80 overflow-y-auto z-50 p-2 space-y-1">
+                    <div id="themeModal" class="hidden absolute right-0 mt-2 w-64 bg-slate-950 border border-[var(--primary)] rounded-xl shadow-2xl max-h-80 overflow-y-auto z-50 p-2 space-y-1">
                         <!-- Populated via JS -->
                     </div>
                 </div>
@@ -135,23 +134,23 @@
             monochrome: { name: "♟️ 25. Sleek Monochrome", primary: "#ffffff", hover: "#cbd5e1", box: "rgba(24, 24, 27, 0.92)", shadow: "rgba(255, 255, 255, 0.25)", bg: "linear-gradient(rgba(9, 9, 11, 0.92), rgba(3, 3, 4, 0.96))" }
         };
 
-        function initThemeDropdown() {
-            const dropdown = document.getElementById('themeDropdown');
-            dropdown.innerHTML = '';
+        function initThemeModal() {
+            const modal = document.getElementById('themeModal');
+            modal.innerHTML = '';
             Object.keys(themes).forEach(key => {
                 const t = themes[key];
-                dropdown.innerHTML += `<div onclick="changeTheme('${key}')" class="px-3 py-2 text-xs rounded cursor-pointer hover:bg-slate-800 transition text-white">${t.name}</div>`;
+                modal.innerHTML += `<div onclick="changeTheme('${key}')" class="px-3 py-2 text-xs rounded cursor-pointer hover:bg-slate-800 transition text-white font-medium">${t.name}</div>`;
             });
         }
 
-        function toggleThemeDropdown() {
-            const dropdown = document.getElementById('themeDropdown');
-            dropdown.classList.toggle('hidden');
+        function toggleThemeModal() {
+            const modal = document.getElementById('themeModal');
+            modal.classList.toggle('hidden');
         }
 
         window.onclick = function(event) {
-            if (!event.target.closest('#themeBtn') && !event.target.closest('#themeDropdown')) {
-                document.getElementById('themeDropdown').classList.add('hidden');
+            if (!event.target.closest('#themeBtn') && !event.target.closest('#themeModal')) {
+                document.getElementById('themeModal').classList.add('hidden');
             }
         }
 
@@ -164,12 +163,12 @@
             r.style.setProperty('--shadow', t.shadow);
             r.style.setProperty('--bg-grad', t.bg);
             document.getElementById('currentThemeName').innerText = t.name;
-            document.getElementById('themeDropdown').classList.add('hidden');
+            document.getElementById('themeModal').classList.add('hidden');
             localStorage.setItem('selectedTheme', name);
         }
 
         const savedTheme = localStorage.getItem('selectedTheme') || 'cyberpunkneon';
-        initThemeDropdown();
+        initThemeModal();
         changeTheme(savedTheme);
 
         const persons = ["Imran", "Saima", "Huzaifa", "Ali"];
@@ -321,7 +320,7 @@
                         const d = new Date(dStr);
                         let inc = false;
                         if (tf === 'daily' && dStr === today) inc = true;
-                        else if (tf === 'weekly' && Math.abs(now - d) / 86400000 <= 7) inc = true;
+                        else if (tf === 'weekly'జి && Math.abs(now - d) / 86400000 <= 7) inc = true;
                         else if (tf === 'monthly' && d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear()) inc = true;
                         else if (tf === 'yearly' && d.getFullYear() === now.getFullYear()) inc = true;
                         if (inc && Array.isArray(pData[dStr])) {
