@@ -1,528 +1,338 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ramadan Kareem Tracker</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
-  <style>
-    /* Default Luxury Theme: Emerald Gold */
-    :root {
-      --bg-dark: #07130e;
-      --bg-gradient: radial-gradient(circle at top, #0f2c20, #07130e);
-      --card-bg: rgba(16, 37, 29, 0.9);
-      --accent-gold: #e5b85c;
-      --accent-gold-light: #f7d58a;
-      --accent-secondary: #104332;
-      --accent-highlight: #1e7054;
-      --text-main: #f1f5f3;
-      --text-muted: #9eb5aa;
-      --border-color: rgba(229, 184, 92, 0.25);
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      font-family: 'Outfit', sans-serif;
-      background: var(--bg-gradient);
-      color: var(--text-main);
-      min-height: 100vh;
-      line-height: 1.6;
-      padding: 25px 15px;
-      transition: background 0.4s ease;
-    }
-
-    .container {
-      max-width: 900px;
-      margin: 0 auto;
-    }
-
-    /* Header */
-    header {
-      text-align: center;
-      padding-bottom: 25px;
-      border-bottom: 1px solid var(--border-color);
-      margin-bottom: 25px;
-    }
-
-    .arabic-title {
-      font-family: 'Amiri', serif;
-      font-size: 2.8rem;
-      color: var(--accent-gold);
-      letter-spacing: 1px;
-      margin-bottom: 5px;
-      transition: color 0.3s ease;
-    }
-
-    header h1 {
-      font-size: 1.8rem;
-      font-weight: 600;
-      color: var(--text-main);
-    }
-
-    header p {
-      color: var(--text-muted);
-      font-size: 0.95rem;
-    }
-
-    /* Cards */
-    .card {
-      background: var(--card-bg);
-      backdrop-filter: blur(8px);
-      border: 1px solid var(--border-color);
-      border-radius: 16px;
-      padding: 24px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
-      margin-bottom: 25px;
-      transition: all 0.3s ease;
-    }
-
-    .card-title {
-      font-size: 1.25rem;
-      font-weight: 600;
-      color: var(--accent-gold);
-      margin-bottom: 15px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      transition: color 0.3s ease;
-    }
-
-    /* 20 Luxury Colors Palette Section */
-    .theme-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-      gap: 10px;
-      margin-top: 15px;
-    }
-
-    .theme-btn {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      background: rgba(0, 0, 0, 0.35);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      padding: 8px 10px;
-      border-radius: 8px;
-      cursor: pointer;
-      color: var(--text-main);
-      font-size: 0.8rem;
-      font-weight: 500;
-      transition: all 0.2s ease;
-    }
-
-    .theme-btn:hover {
-      border-color: var(--accent-gold);
-      transform: translateY(-2px);
-    }
-
-    .theme-btn.active {
-      border: 2px solid var(--accent-gold);
-      background: rgba(255, 255, 255, 0.08);
-      font-weight: 700;
-    }
-
-    .color-dot {
-      width: 14px;
-      height: 14px;
-      border-radius: 50%;
-      border: 1px solid rgba(255,255,255,0.4);
-      flex-shrink: 0;
-    }
-
-    /* Progress Bar */
-    .score-badge {
-      background: var(--accent-highlight);
-      color: #fff;
-      font-size: 0.85rem;
-      padding: 4px 12px;
-      border-radius: 20px;
-      border: 1px solid var(--accent-gold);
-      transition: all 0.3s ease;
-    }
-
-    .progress-bar-container {
-      width: 100%;
-      height: 10px;
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 10px;
-      overflow: hidden;
-      margin-bottom: 20px;
-    }
-
-    .progress-fill {
-      height: 100%;
-      width: 0%;
-      background: linear-gradient(90deg, var(--accent-highlight), var(--accent-gold));
-      transition: width 0.3s ease, background 0.3s ease;
-    }
-
-    /* Checklist Grid */
-    .checklist-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 12px;
-    }
-
-    .check-item {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      background: rgba(0, 0, 0, 0.25);
-      border: 1px solid var(--border-color);
-      padding: 14px 16px;
-      border-radius: 12px;
-      cursor: pointer;
-      user-select: none;
-      transition: all 0.2s ease;
-    }
-
-    .check-item:hover {
-      border-color: var(--accent-gold);
-      background: rgba(0, 0, 0, 0.35);
-    }
-
-    .check-item input[type="checkbox"] {
-      appearance: none;
-      width: 22px;
-      height: 22px;
-      border: 2px solid var(--accent-gold);
-      border-radius: 6px;
-      outline: none;
-      cursor: pointer;
-      position: relative;
-      background: transparent;
-      transition: all 0.2s ease;
-    }
-
-    .check-item input[type="checkbox"]:checked {
-      background: var(--accent-gold);
-    }
-
-    .check-item input[type="checkbox"]:checked::after {
-      content: '✓';
-      position: absolute;
-      color: #000;
-      font-weight: bold;
-      font-size: 14px;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-    }
-
-    .check-item.completed {
-      border-color: var(--border-color);
-      background: rgba(255, 255, 255, 0.05);
-    }
-
-    .check-item.completed span {
-      color: var(--text-muted);
-      text-decoration: line-through;
-    }
-
-    .item-label {
-      font-weight: 500;
-      font-size: 0.95rem;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .item-sub {
-      font-size: 0.75rem;
-      color: var(--text-muted);
-    }
-
-    /* Actions */
-    .btn-reset {
-      margin-top: 18px;
-      background: transparent;
-      border: 1px solid var(--border-color);
-      color: var(--accent-gold-light);
-      padding: 8px 16px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 0.85rem;
-      transition: all 0.2s ease;
-    }
-
-    .btn-reset:hover {
-      background: rgba(255, 255, 255, 0.08);
-      border-color: var(--accent-gold);
-    }
-
-    /* Duas Section */
-    .dua-box {
-      background: rgba(0, 0, 0, 0.25);
-      border-left: 3px solid var(--accent-gold);
-      padding: 14px 18px;
-      border-radius: 0 10px 10px 0;
-      margin-bottom: 12px;
-      transition: border-color 0.3s ease;
-    }
-
-    .dua-arabic {
-      font-family: 'Amiri', serif;
-      font-size: 1.35rem;
-      text-align: right;
-      color: var(--accent-gold-light);
-      direction: rtl;
-      margin-bottom: 5px;
-    }
-
-    .dua-text {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-    }
-  </style>
-</head>
-<body>
-
-  <div class="container">
-    <header>
-      <div class="arabic-title">رمضان كريم</div>
-      <h1>Daily Ibadat & Ramadan Tracker</h1>
-      <p>Apne aamaal track karein aur barkatein hasil karein</p>
-    </header>
-
-    <!-- NEW SECTION: 20 Luxury Premium Colors Selector -->
-    <div class="card">
-      <div class="card-title">
-        <span>Luxury & Premium Themes</span>
-        <span style="font-size: 0.85rem; color: var(--text-muted);" id="currentThemeName">Theme: Emerald Gold</span>
-      </div>
-      <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 10px;">Apni pasand ka premium aesthetic color choose karein:</p>
-      
-      <div class="theme-grid" id="themeGrid">
-        <!-- 20 Luxury Color buttons rendered dynamically via JS -->
-      </div>
-    </div>
-
-    <!-- Original Checklist Card (Pehle Jaisa) -->
-    <div class="card">
-      <div class="card-title">
-        <span>Today's Checklist</span>
-        <span class="score-badge" id="scoreBadge">0 / 6 Completed</span>
-      </div>
-
-      <div class="progress-bar-container">
-        <div class="progress-fill" id="progressFill"></div>
-      </div>
-
-      <div class="checklist-grid">
-        <!-- 1. FAST -->
-        <label class="check-item" id="item-fast">
-          <input type="checkbox" id="check-fast" onchange="toggleItem(this, 'item-fast')">
-          <div class="item-label">
-            <span>1. Roza (Fast)</span>
-            <span class="item-sub">Sehri se Iftar tak niyyat ke sath</span>
-          </div>
-        </label>
-
-        <!-- 2. ALL FARZ NAMAZ -->
-        <label class="check-item" id="item-farz">
-          <input type="checkbox" id="check-farz" onchange="toggleItem(this, 'item-farz')">
-          <div class="item-label">
-            <span>2. All Farz Namaz</span>
-            <span class="item-sub">Fajr, Zuhr, Asr, Maghrib, Isha</span>
-          </div>
-        </label>
-
-        <!-- 3. READ QURAN -->
-        <label class="check-item" id="item-quran">
-          <input type="checkbox" id="check-quran" onchange="toggleItem(this, 'item-quran')">
-          <div class="item-label">
-            <span>3. Read Quran</span>
-            <span class="item-sub">Tilawat ya rozana ka juz/para</span>
-          </div>
-        </label>
-
-        <!-- 4. SUNNAT NAMAZ -->
-        <label class="check-item" id="item-sunnat">
-          <input type="checkbox" id="check-sunnat" onchange="toggleItem(this, 'item-sunnat')">
-          <div class="item-label">
-            <span>4. Sunnat Namaz</span>
-            <span class="item-sub">Sunnat-e-Muakkadah & Nawaafil</span>
-          </div>
-        </label>
-
-        <!-- 5. TAHAJJUD -->
-        <label class="check-item" id="item-tahajjud">
-          <input type="checkbox" id="check-tahajjud" onchange="toggleItem(this, 'item-tahajjud')">
-          <div class="item-label">
-            <span>5. Tahajjud</span>
-            <span class="item-sub">Sehri se pehle ki qiyam</span>
-          </div>
-        </label>
-
-        <!-- 6. TARAWIH -->
-        <label class="check-item" id="item-tarawih">
-          <input type="checkbox" id="check-tarawih" onchange="toggleItem(this, 'item-tarawih')">
-          <div class="item-label">
-            <span>6. Tarawih</span>
-            <span class="item-sub">Isha ke baad ki namaz</span>
-          </div>
-        </label>
-      </div>
-
-      <button class="btn-reset" onclick="resetChecklist()">Reset Checklist for Tomorrow</button>
-    </div>
-
-    <!-- Original Duas Card (Pehle Jaisa) -->
-    <div class="card">
-      <div class="card-title">Daily Duas</div>
-      
-      <div class="dua-box">
-        <strong>Sehri ki Dua (Roze ki Niyyat):</strong>
-        <div class="dua-arabic">وَبِصَوْمِ غَدٍ نَوَيْتُ مِنْ شَهْرِ رَمَضَانَ</div>
-        <div class="dua-text">"Wa bisawmi ghadinn nawaytu min shahri ramadan."</div>
-      </div>
-
-      <div class="dua-box">
-        <strong>Iftar ki Dua:</strong>
-        <div class="dua-arabic">اللَّهُمَّ إِنِّي لَكَ صُمْتُ وَبِكَ آمَنْتُ وَعَلَيْكَ تَوَكَّلْتُ وَعَلَى رِزْقِكَ أَفْطَرْتُ</div>
-        <div class="dua-text">"Allahumma inni laka sumtu wa bika aamantu wa alayka tawakkaltu wa ala rizq-ika aftartu."</div>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    // --- 20 LUXURY PREMIUM COLOR THEMES ---
-    const luxuryThemes = [
-      { id: "emerald_gold", name: "1. Emerald Gold", dot: "#e5b85c", bg: "radial-gradient(circle at top, #0f2c20, #07130e)", card: "rgba(16, 37, 29, 0.9)", gold: "#e5b85c", light: "#f7d58a", high: "#1e7054", border: "rgba(229, 184, 92, 0.25)" },
-      { id: "royal_velvet", name: "2. Royal Velvet", dot: "#b388ff", bg: "radial-gradient(circle at top, #2b1045, #120520)", card: "rgba(35, 14, 56, 0.9)", gold: "#d4af37", light: "#ffd54f", high: "#6a1b9a", border: "rgba(212, 175, 55, 0.3)" },
-      { id: "midnight_sapphire", name: "3. Midnight Sapphire", dot: "#4fc3f7", bg: "radial-gradient(circle at top, #0d253f, #050e1a)", card: "rgba(12, 31, 53, 0.9)", gold: "#38bdf8", light: "#bae6fd", high: "#0284c7", border: "rgba(56, 189, 248, 0.25)" },
-      { id: "black_diamond", name: "4. Black Diamond", dot: "#ffffff", bg: "radial-gradient(circle at top, #212121, #0a0a0a)", card: "rgba(24, 24, 24, 0.92)", gold: "#ffffff", light: "#e0e0e0", high: "#424242", border: "rgba(255, 255, 255, 0.25)" },
-      { id: "rose_gold", name: "5. Rose Gold Luxe", dot: "#f48fb1", bg: "radial-gradient(circle at top, #361724, #180911)", card: "rgba(43, 20, 30, 0.9)", gold: "#f0a6b7", light: "#fce4ec", high: "#ad1457", border: "rgba(240, 166, 183, 0.3)" },
-      { id: "imperial_ruby", name: "6. Imperial Ruby", dot: "#ef5350", bg: "radial-gradient(circle at top, #3b0e14, #1a0407)", card: "rgba(48, 14, 20, 0.9)", gold: "#e5b85c", light: "#f9d07e", high: "#b71c1c", border: "rgba(229, 184, 92, 0.3)" },
-      { id: "deep_ocean", name: "7. Deep Ocean Pearl", dot: "#00e5ff", bg: "radial-gradient(circle at top, #002e3b, #001217)", card: "rgba(2, 38, 48, 0.9)", gold: "#00e5ff", light: "#84ffff", high: "#00838f", border: "rgba(0, 229, 255, 0.25)" },
-      { id: "dubai_gold", name: "8. Dubai Solid Gold", dot: "#ffd700", bg: "radial-gradient(circle at top, #2d2305, #141002)", card: "rgba(38, 30, 6, 0.9)", gold: "#ffd700", light: "#ffecb3", high: "#997b00", border: "rgba(255, 215, 0, 0.35)" },
-      { id: "mystic_amethyst", name: "9. Mystic Amethyst", dot: "#ba68c8", bg: "radial-gradient(circle at top, #2a1138, #110418)", card: "rgba(36, 15, 48, 0.9)", gold: "#e1bee7", light: "#f3e5f5", high: "#7b1fa2", border: "rgba(225, 190, 231, 0.25)" },
-      { id: "champagne_luxe", name: "10. Champagne Glow", dot: "#fad02c", bg: "radial-gradient(circle at top, #292418, #120f0a)", card: "rgba(36, 31, 20, 0.9)", gold: "#f7d070", light: "#fff3cc", high: "#7a6326", border: "rgba(247, 208, 112, 0.3)" },
-      { id: "titanium_silver", name: "11. Titanium Silver", dot: "#b0bec5", bg: "radial-gradient(circle at top, #1e262c, #0e1215)", card: "rgba(25, 33, 38, 0.9)", gold: "#cfd8dc", light: "#eceff1", high: "#546e7a", border: "rgba(207, 216, 220, 0.25)" },
-      { id: "sultan_amber", name: "12. Sultan Amber", dot: "#ff9800", bg: "radial-gradient(circle at top, #361f05, #170d01)", card: "rgba(43, 25, 6, 0.9)", gold: "#ffb74d", light: "#ffe0b2", high: "#e65100", border: "rgba(255, 183, 77, 0.3)" },
-      { id: "majestic_teal", name: "13. Majestic Teal", dot: "#26a69a", bg: "radial-gradient(circle at top, #06302d, #011413)", card: "rgba(8, 41, 38, 0.9)", gold: "#80cbc4", light: "#e0f2f1", high: "#00695c", border: "rgba(128, 203, 196, 0.25)" },
-      { id: "smoked_obsidian", name: "14. Smoked Obsidian", dot: "#ff7043", bg: "radial-gradient(circle at top, #1f1b1a, #0c0a0a)", card: "rgba(28, 24, 23, 0.92)", gold: "#ff8a65", light: "#ffccbc", high: "#d84315", border: "rgba(255, 138, 101, 0.25)" },
-      { id: "moroccan_copper", name: "15. Moroccan Copper", dot: "#d7ccc8", bg: "radial-gradient(circle at top, #301f19, #140b08)", card: "rgba(38, 25, 20, 0.9)", gold: "#d7a98c", light: "#f0ded4", high: "#8d4f34", border: "rgba(215, 169, 140, 0.3)" },
-      { id: "aurora_green", name: "16. Aurora Jade", dot: "#69f0ae", bg: "radial-gradient(circle at top, #0b3820, #04190e)", card: "rgba(12, 43, 26, 0.9)", gold: "#69f0ae", light: "#b9f6ca", high: "#00897b", border: "rgba(105, 240, 174, 0.25)" },
-      { id: "electric_violet", name: "17. Electric Violet", dot: "#b39ddb", bg: "radial-gradient(circle at top, #201338, #0c0617)", card: "rgba(27, 16, 48, 0.9)", gold: "#d1c4e9", light: "#ede7f6", high: "#5e35b1", border: "rgba(209, 196, 233, 0.25)" },
-      { id: "vintage_bronze", name: "18. Vintage Bronze", dot: "#bcaaa4", bg: "radial-gradient(circle at top, #2c231c, #130e0b)", card: "rgba(36, 28, 23, 0.9)", gold: "#cdb599", light: "#ede3d8", high: "#6d4c41", border: "rgba(205, 181, 153, 0.3)" },
-      { id: "crimson_night", name: "19. Crimson Night", dot: "#e57373", bg: "radial-gradient(circle at top, #360c15, #170408)", card: "rgba(43, 11, 18, 0.9)", gold: "#ef9a9a", light: "#ffcdd2", high: "#880e4f", border: "rgba(239, 154, 154, 0.25)" },
-      { id: "platinum_frost", name: "20. Platinum Frost", dot: "#80deea", bg: "radial-gradient(circle at top, #142830, #081114)", card: "rgba(18, 35, 43, 0.9)", gold: "#b2ebf2", light: "#e0f7fa", high: "#0097a7", border: "rgba(178, 235, 242, 0.25)" }
-    ];
-
-    // Render 20 Luxury Theme Buttons
-    function initThemes() {
-      const grid = document.getElementById('themeGrid');
-      grid.innerHTML = '';
-      const savedThemeId = localStorage.getItem('ramadan_theme') || 'emerald_gold';
-
-      luxuryThemes.forEach(theme => {
-        const btn = document.createElement('button');
-        btn.className = `theme-btn ${theme.id === savedThemeId ? 'active' : ''}`;
-        btn.id = `btn-${theme.id}`;
-        btn.onclick = () => applyTheme(theme);
-
-        btn.innerHTML = `
-          <span class="color-dot" style="background: ${theme.dot}; box-shadow: 0 0 6px ${theme.dot};"></span>
-          <span>${theme.name}</span>
-        `;
-        grid.appendChild(btn);
-      });
-
-      const currentTheme = luxuryThemes.find(t => t.id === savedThemeId) || luxuryThemes[0];
-      applyTheme(currentTheme, false);
-    }
-
-    // Apply Chosen Theme
-    function applyTheme(theme, save = true) {
-      const root = document.documentElement;
-      root.style.setProperty('--bg-gradient', theme.bg);
-      root.style.setProperty('--card-bg', theme.card);
-      root.style.setProperty('--accent-gold', theme.gold);
-      root.style.setProperty('--accent-gold-light', theme.light);
-      root.style.setProperty('--accent-highlight', theme.high);
-      root.style.setProperty('--border-color', theme.border);
-
-      document.getElementById('currentThemeName').innerText = `Theme: ${theme.name.replace(/^[0-9]+\.\s*/, '')}`;
-
-      document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
-      const activeBtn = document.getElementById(`btn-${theme.id}`);
-      if (activeBtn) activeBtn.classList.add('active');
-
-      if (save) {
-        localStorage.setItem('ramadan_theme', theme.id);
-      }
-    }
-
-    // --- ORIGINAL CHECKLIST LOGIC (FAST, FARZ, QURAN, SUNNAT, TAHAJJUD, TARAWIH) ---
-    const items = ['fast', 'farz', 'quran', 'sunnat', 'tahajjud', 'tarawih'];
-
-    function loadProgress() {
-      let completedCount = 0;
-      items.forEach(id => {
-        const isChecked = localStorage.getItem('ramadan_' + id) === 'true';
-        const checkbox = document.getElementById('check-' + id);
-        const cardItem = document.getElementById('item-' + id);
-
-        if (checkbox && cardItem) {
-          checkbox.checked = isChecked;
-          if (isChecked) {
-            cardItem.classList.add('completed');
-            completedCount++;
-          } else {
-            cardItem.classList.remove('completed');
-          }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Zikr & Namaaz Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --bg-grad: linear-gradient(rgba(10, 5, 25, 0.92), rgba(5, 2, 15, 0.96));
+            --primary: #ff007f;
+            --primary-hover: #e60073;
+            --box-bg: rgba(18, 10, 35, 0.92);
+            --shadow: rgba(255, 0, 127, 0.45);
         }
-      });
-      updateStats(completedCount);
-    }
+        body {
+            background: var(--bg-grad), 
+                        linear-gradient(90deg, rgba(0, 200, 255, 0.15) 0%, rgba(255, 0, 0, 0.15) 100%),
+                        url('https://images.unsplash.com/photo-1544829099-b9a0c07fad1a?q=80&w=1920&auto=format&fit=crop');
+            background-size: cover; background-position: center; background-attachment: fixed;
+            color: #ffffff;
+        }
+        .theme-title { color: var(--primary); text-shadow: 0 0 15px var(--shadow); }
+        .theme-box { background: var(--box-bg); border: 1.5px solid var(--primary); box-shadow: 0 0 25px var(--shadow); backdrop-filter: blur(8px); }
+        .theme-btn { background: var(--primary); color: #fff; font-weight: bold; box-shadow: 0 0 20px var(--shadow); transition: 0.3s; }
+        .theme-btn:hover { background: var(--primary-hover); box-shadow: 0 0 30px var(--shadow); }
+    </style>
+</head>
+<body class="min-h-screen font-sans p-4">
+    <div class="max-w-4xl mx-auto space-y-6">
+        <header class="theme-box p-4 rounded-xl flex justify-between items-center flex-wrap gap-4">
+            <h1 class="text-xl font-bold theme-title">📿 Zikr & Namaaz Portal</h1>
+            <div class="flex items-center gap-2 flex-wrap">
+                <select id="themeSelector" onchange="changeTheme(this.value)" class="bg-slate-900 border text-xs rounded p-2 text-white outline-none">
+                    <option value="cyberpunkneon">⚡ 1. Cyberpunk Neon Glow</option>
+                    <option value="emerald">💎 2. Emerald Cyan</option>
+                    <option value="gold">👑 3. Royal Gold</option>
+                    <option value="sapphire">🔷 4. Sapphire Blue</option>
+                    <option value="ruby">❤️ 5. Ruby Crimson</option>
+                    <option value="amethyst">🔮 6. Royal Amethyst</option>
+                    <option value="rosegold">✨ 7. Rose Gold</option>
+                    <option value="platinum">🪙 8. Platinum Silver</option>
+                    <option value="emeraldgreen">🌿 9. Imperial Emerald</option>
+                    <option value="sunset">🌅 10. Sunset Copper</option>
+                    <option value="cyber">⚡ 11. Cyber Neon Luxe</option>
+                    <option value="neonblue">🔹 12. Electric Neon Blue</option>
+                    <option value="neongreen">🟢 13. Toxic Neon Green</option>
+                    <option value="neonyellow">🟡 14. Laser Neon Yellow</option>
+                    <option value="neonpurple">🟣 15. Ultraviolet Neon</option>
+                    <option value="neonorange">🟠 16. Blazing Neon Orange</option>
+                    <option value="midnight">🌙 17. Midnight Dark</option>
+                    <option value="galaxy">🌌 18. Deep Galaxy Purple</option>
+                    <option value="crimson">🩸 19. Dark Crimson Night</option>
+                    <option value="ocean">🌊 20. Deep Ocean Teal</option>
+                    <option value="forest">🌲 21. Dark Forest Pine</option>
+                    <option value="coffee">☕ 22. Espresso Coffee</option>
+                    <option value="lavender">🪻 23. Soft Lavender Dark</option>
+                    <option value="peach">🍑 24. Sunset Peach</option>
+                    <option value="monochrome">♟️ 25. Sleek Monochrome</option>
+                </select>
+                <button onclick="switchTab('tracker')" id="btn-tracker" class="px-3 py-2 rounded font-medium theme-btn text-xs">Daily Zikr</button>
+                <button onclick="switchTab('extrasawaab')" id="btn-extrasawaab" class="px-3 py-2 rounded font-medium bg-slate-800 text-slate-300 text-xs">Extra Sawaab</button>
+                <button onclick="switchTab('namaaz')" id="btn-namaaz" class="px-3 py-2 rounded font-medium bg-slate-800 text-slate-300 text-xs">Daily Namaaz</button>
+                <button onclick="switchTab('analytics')" id="btn-analytics" class="px-3 py-2 rounded font-medium bg-slate-800 text-slate-300 text-xs">Analytics</button>
+            </div>
+        </header>
 
-    function toggleItem(checkbox, cardId) {
-      const card = document.getElementById(cardId);
-      const keyId = cardId.replace('item-', '');
-      
-      if (checkbox.checked) {
-        card.classList.add('completed');
-        localStorage.setItem('ramadan_' + keyId, 'true');
-      } else {
-        card.classList.remove('completed');
-        localStorage.setItem('ramadan_' + keyId, 'false');
-      }
+        <!-- TAB 1: DAILY ZIKR -->
+        <section id="tab-tracker" class="theme-box p-6 rounded-xl space-y-4">
+            <h2 class="text-lg font-semibold theme-title">Mark Daily Zikr</h2>
+            <div class="grid grid-cols-2 gap-4">
+                <select id="personSelect" class="bg-slate-900 border rounded p-2 text-white text-sm"><option>Imran</option><option>Saima</option><option>Huzaifa</option><option>Ali</option></select>
+                <input type="date" id="dateSelect" class="bg-slate-900 border rounded p-2 text-white text-sm">
+            </div>
+            <div id="zikrList" class="space-y-3"></div>
+            <button onclick="saveZikr()" class="w-full theme-btn py-2.5 rounded text-sm">Save Zikr Progress</button>
+        </section>
 
-      let count = 0;
-      items.forEach(id => {
-        if (localStorage.getItem('ramadan_' + id) === 'true') count++;
-      });
-      updateStats(count);
-    }
+        <!-- TAB 2: EXTRA SAWAAB -->
+        <section id="tab-extrasawaab" class="theme-box p-6 rounded-xl space-y-4 hidden">
+            <h2 class="text-lg font-semibold theme-title">Mark Extra Sawaab</h2>
+            <div class="grid grid-cols-2 gap-4">
+                <select id="personSelectExtra" class="bg-slate-900 border rounded p-2 text-white text-sm"><option>Imran</option><option>Saima</option><option>Huzaifa</option><option>Ali</option></select>
+                <input type="date" id="dateSelectExtra" class="bg-slate-900 border rounded p-2 text-white text-sm">
+            </div>
+            <div id="extraList" class="space-y-2"></div>
+            <button onclick="save('extraData', extras, 'extra', 'personSelectExtra', 'dateSelectExtra')" class="w-full theme-btn py-2.5 rounded text-sm">Save Extra Sawaab</button>
+        </section>
 
-    function updateStats(count) {
-      const total = items.length;
-      document.getElementById('scoreBadge').innerText = `${count} / ${total} Completed`;
-      const percentage = (count / total) * 100;
-      document.getElementById('progressFill').style.width = percentage + '%';
-    }
+        <!-- TAB 3: DAILY NAMAAZ -->
+        <section id="tab-namaaz" class="theme-box p-6 rounded-xl space-y-4 hidden">
+            <h2 class="text-lg font-semibold theme-title">Mark Daily Namaaz</h2>
+            <div class="grid grid-cols-2 gap-4">
+                <select id="personSelectNamaaz" class="bg-slate-900 border rounded p-2 text-white text-sm"><option>Imran</option><option>Saima</option><option>Huzaifa</option><option>Ali</option></select>
+                <input type="date" id="dateSelectNamaaz" class="bg-slate-900 border rounded p-2 text-white text-sm">
+            </div>
+            <div id="namaazList" class="space-y-2"></div>
+            <button onclick="save('namaazData', namaazs, 'namaaz', 'personSelectNamaaz', 'dateSelectNamaaz')" class="w-full theme-btn py-2.5 rounded text-sm">Save Namaaz Progress</button>
+        </section>
 
-    function resetChecklist() {
-      if (confirm('Kya aap aaj ki checklist reset karna chahte hain?')) {
-        items.forEach(id => {
-          localStorage.removeItem('ramadan_' + id);
-        });
-        loadProgress();
-      }
-    }
+        <!-- TAB 4: ANALYTICS -->
+        <section id="tab-analytics" class="theme-box p-6 rounded-xl space-y-4 hidden">
+            <div class="flex justify-between items-center flex-wrap gap-2">
+                <h2 class="text-lg font-semibold theme-title">Analytics & Reports</h2>
+                <div class="flex gap-2">
+                    <select id="catSelect" onchange="drawChart()" class="bg-slate-900 border rounded p-1.5 text-white text-xs">
+                        <option value="zikr">Daily Zikr</option>
+                        <option value="extra">Extra Sawaab</option>
+                        <option value="namaaz">Daily Namaaz</option>
+                    </select>
+                    <select id="timeSelect" onchange="drawChart()" class="bg-slate-900 border rounded p-1.5 text-white text-xs">
+                        <option value="daily">Daily</option>
+                        <option value="weekly">Weekly</option>
+                        <option value="monthly">Monthly</option>
+                        <option value="yearly">Yearly</option>
+                    </select>
+                </div>
+            </div>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3" id="cards"></div>
+            <div class="relative h-72"><canvas id="myChart"></canvas></div>
+        </section>
+    </div>
 
-    // Initialize both themes and checklist on load
-    window.onload = function() {
-      initThemes();
-      loadProgress();
-    };
-  </script>
+    <script>
+        const themes = {
+            cyberpunkneon: { primary: "#ff007f", hover: "#e60073", box: "rgba(18, 10, 35, 0.92)", shadow: "rgba(255, 0, 127, 0.45)", bg: "linear-gradient(rgba(10, 5, 25, 0.92), rgba(5, 2, 15, 0.96))" },
+            emerald: { primary: "#00ffcc", hover: "#00cca3", box: "rgba(13, 20, 38, 0.9)", shadow: "rgba(0, 255, 204, 0.2)", bg: "linear-gradient(rgba(5, 10, 25, 0.90), rgba(5, 10, 25, 0.94))" },
+            gold: { primary: "#d4af37", hover: "#b3922f", box: "rgba(30, 25, 15, 0.9)", shadow: "rgba(212, 175, 55, 0.25)", bg: "linear-gradient(rgba(15, 15, 15, 0.92), rgba(25, 20, 10, 0.95))" },
+            sapphire: { primary: "#3b82f6", hover: "#2563eb", box: "rgba(15, 23, 42, 0.9)", shadow: "rgba(59, 130, 246, 0.3)", bg: "linear-gradient(rgba(10, 15, 35, 0.90), rgba(5, 10, 25, 0.94))" },
+            ruby: { primary: "#ef4444", hover: "#dc2626", box: "rgba(35, 15, 15, 0.9)", shadow: "rgba(239, 68, 68, 0.3)", bg: "linear-gradient(rgba(30, 10, 10, 0.90), rgba(15, 5, 5, 0.94))" },
+            amethyst: { primary: "#a855f7", hover: "#9333ea", box: "rgba(25, 15, 35, 0.9)", shadow: "rgba(168, 85, 247, 0.3)", bg: "linear-gradient(rgba(20, 10, 30, 0.90), rgba(10, 5, 20, 0.94))" },
+            rosegold: { primary: "#fb7185", hover: "#f43f5e", box: "rgba(35, 18, 24, 0.9)", shadow: "rgba(251, 113, 133, 0.3)", bg: "linear-gradient(rgba(30, 15, 20, 0.90), rgba(15, 8, 10, 0.94))" },
+            platinum: { primary: "#e2e8f0", hover: "#cbd5e1", box: "rgba(30, 41, 59, 0.9)", shadow: "rgba(226, 232, 240, 0.2)", bg: "linear-gradient(rgba(15, 23, 42, 0.90), rgba(15, 23, 42, 0.94))" },
+            emeraldgreen: { primary: "#10b981", hover: "#059669", box: "rgba(10, 30, 20, 0.9)", shadow: "rgba(16, 185, 129, 0.3)", bg: "linear-gradient(rgba(5, 25, 15, 0.90), rgba(2, 15, 8, 0.94))" },
+            sunset: { primary: "#f97316", hover: "#ea580c", box: "rgba(35, 18, 10, 0.9)", shadow: "rgba(249, 115, 22, 0.3)", bg: "linear-gradient(rgba(30, 15, 5, 0.90), rgba(15, 8, 2, 0.94))" },
+            cyber: { primary: "#f43f5e", hover: "#e11d48", box: "rgba(20, 10, 40, 0.9)", shadow: "rgba(244, 63, 94, 0.4)", bg: "linear-gradient(rgba(10, 5, 30, 0.90), rgba(5, 2, 15, 0.94))" },
+            neonblue: { primary: "#00d2ff", hover: "#0099cc", box: "rgba(5, 20, 35, 0.92)", shadow: "rgba(0, 210, 255, 0.4)", bg: "linear-gradient(rgba(2, 10, 25, 0.92), rgba(1, 5, 15, 0.96))" },
+            neongreen: { primary: "#00ff66", hover: "#00cc52", box: "rgba(5, 30, 15, 0.92)", shadow: "rgba(0, 255, 102, 0.4)", bg: "linear-gradient(rgba(2, 15, 8, 0.92), rgba(1, 8, 3, 0.96))" },
+            neonyellow: { primary: "#ccff00", hover: "#a3cc00", box: "rgba(25, 30, 5, 0.92)", shadow: "rgba(204, 255, 0, 0.4)", bg: "linear-gradient(rgba(12, 15, 2, 0.92), rgba(6, 8, 1, 0.96))" },
+            neonpurple: { primary: "#9d00ff", hover: "#7e00cc", box: "rgba(20, 5, 35, 0.92)", shadow: "rgba(157, 0, 255, 0.4)", bg: "linear-gradient(rgba(10, 2, 18, 0.92), rgba(5, 1, 9, 0.96))" },
+            neonorange: { primary: "#ff5500", hover: "#cc4400", box: "rgba(35, 15, 5, 0.92)", shadow: "rgba(255, 85, 0, 0.4)", bg: "linear-gradient(rgba(18, 7, 2, 0.92), rgba(9, 3, 1, 0.96))" },
+            midnight: { primary: "#64748b", hover: "#475569", box: "rgba(15, 23, 42, 0.92)", shadow: "rgba(100, 116, 139, 0.3)", bg: "linear-gradient(rgba(2, 6, 23, 0.92), rgba(1, 3, 12, 0.96))" },
+            galaxy: { primary: "#c084fc", hover: "#a855f7", box: "rgba(24, 10, 45, 0.92)", shadow: "rgba(192, 132, 252, 0.4)", bg: "linear-gradient(rgba(12, 5, 25, 0.92), rgba(6, 2, 12, 0.96))" },
+            crimson: { primary: "#991b1b", hover: "#7f1d1d", box: "rgba(40, 10, 10, 0.92)", shadow: "rgba(153, 27, 27, 0.4)", bg: "linear-gradient(rgba(20, 5, 5, 0.92), rgba(10, 2, 2, 0.96))" },
+            ocean: { primary: "#0d9488", hover: "#0f766e", box: "rgba(10, 30, 30, 0.92)", shadow: "rgba(13, 148, 136, 0.4)", bg: "linear-gradient(rgba(5, 15, 15, 0.92), rgba(2, 8, 8, 0.96))" },
+            forest: { primary: "#15803d", hover: "#166534", box: "rgba(10, 35, 20, 0.92)", shadow: "rgba(21, 128, 61, 0.4)", bg: "linear-gradient(rgba(5, 18, 10, 0.92), rgba(2, 9, 5, 0.96))" },
+            coffee: { primary: "#b45309", hover: "#92400e", box: "rgba(35, 20, 10, 0.92)", shadow: "rgba(180, 83, 9, 0.4)", bg: "linear-gradient(rgba(18, 10, 5, 0.92), rgba(9, 5, 2, 0.96))" },
+            lavender: { primary: "#d8b4fe", hover: "#c084fc", box: "rgba(30, 20, 40, 0.92)", shadow: "rgba(216, 180, 254, 0.3)", bg: "linear-gradient(rgba(15, 10, 20, 0.92), rgba(8, 5, 10, 0.96))" },
+            peach: { primary: "#ffedd5", hover: "#fed7aa", box: "rgba(40, 25, 20, 0.92)", shadow: "rgba(255, 237, 213, 0.3)", bg: "linear-gradient(rgba(20, 12, 10, 0.92), rgba(10, 6, 5, 0.96))" },
+            monochrome: { primary: "#ffffff", hover: "#cbd5e1", box: "rgba(24, 24, 27, 0.92)", shadow: "rgba(255, 255, 255, 0.25)", bg: "linear-gradient(rgba(9, 9, 11, 0.92), rgba(3, 3, 4, 0.96))" }
+        };
+
+        function changeTheme(name) {
+            const t = themes[name] || themes.cyberpunkneon;
+            const r = document.documentElement;
+            r.style.setProperty('--primary', t.primary);
+            r.style.setProperty('--primary-hover', t.hover);
+            r.style.setProperty('--box-bg', t.box);
+            r.style.setProperty('--shadow', t.shadow);
+            r.style.setProperty('--bg-grad', t.bg);
+            localStorage.setItem('selectedTheme', name);
+        }
+        const savedTheme = localStorage.getItem('selectedTheme') || 'cyberpunkneon';
+        changeTheme(savedTheme);
+        document.getElementById('themeSelector').value = savedTheme;
+
+        const persons = ["Imran", "Saima", "Huzaifa", "Ali"];
+        const zikrs = ["1. 1st Kalma", "2. 4th Kalma", "3. Tasbee", "4. Subhanallahi wa bihamdihi, subhanallahil azeem", "5. Aytal Qursi", "6. Last 2 Aayat", "7. Astagfirullah (100x)"];
+        const extras = ["1. Quran Reading", "2. Tahajjud namaaz", "3. Witr namaaz", "4. Nafil namaaz", "5. Sunnat namaaz"];
+        const namaazs = ["1. Fajr", "2. Asar", "3. Zohar", "4. Maghrib", "5. Isha"];
+
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('dateSelect').value = today;
+        document.getElementById('dateSelectExtra').value = today;
+        document.getElementById('dateSelectNamaaz').value = today;
+
+        function renderZikr() {
+            const el = document.getElementById('zikrList');
+            el.innerHTML = '';
+            zikrs.forEach((item, i) => {
+                if(i === 3) {
+                    el.innerHTML += `
+                        <div class="p-2.5 bg-slate-900/80 border border-slate-700 rounded space-y-2">
+                            <label class="flex items-center gap-3 cursor-pointer">
+                                <input type="checkbox" id="zikr-${i}" class="w-4 h-4 accent-[var(--primary)]">
+                                <span class="text-sm font-medium">${item}</span>
+                            </label>
+                            <div class="flex items-center justify-between pl-7">
+                                <span class="text-xs text-slate-400">Kitni baar padha (Count):</span>
+                                <input type="number" id="zikr-count-${i}" min="0" placeholder="e.g. 100" class="bg-slate-800 border border-slate-600 rounded px-2 py-1 text-xs text-white w-24 text-center outline-none focus:border-[var(--primary)]">
+                            </div>
+                        </div>`;
+                } else {
+                    el.innerHTML += `<label class="flex items-center gap-3 p-2.5 bg-slate-900/80 border border-slate-700 rounded cursor-pointer"><input type="checkbox" id="zikr-${i}" class="w-4 h-4 accent-[var(--primary)]"><span class="text-sm">${item}</span></label>`;
+                }
+            });
+        }
+
+        function render(list, id, prefix) {
+            const el = document.getElementById(id);
+            el.innerHTML = '';
+            list.forEach((item, i) => {
+                el.innerHTML += `<label class="flex items-center gap-3 p-2.5 bg-slate-900/80 border border-slate-700 rounded cursor-pointer"><input type="checkbox" id="${prefix}-${i}" class="w-4 h-4 accent-[var(--primary)]"><span class="text-sm">${item}</span></label>`;
+            });
+        }
+        renderZikr();
+        render(extras, 'extraList', 'extra');
+        render(namaazs, 'namaazList', 'namaaz');
+
+        function switchTab(tab) {
+            ['tracker', 'extrasawaab', 'namaaz', 'analytics'].forEach(t => {
+                document.getElementById(`tab-${t}`).classList.toggle('hidden', t !== tab);
+                document.getElementById(`btn-${t}`).className = `px-3 py-2 rounded font-medium text-xs ${t === tab ? 'theme-btn' : 'bg-slate-800 text-slate-300'}`;
+            });
+            if(tab === 'analytics') drawChart();
+        }
+
+        function getData(key) { return JSON.parse(localStorage.getItem(key) || '{}'); }
+
+        function saveZikr() {
+            const p = document.getElementById('personSelect').value;
+            const d = document.getElementById('dateSelect').value;
+            const data = getData('zikrData');
+            if(!data[p]) data[p] = {};
+            
+            const checks = zikrs.map((_, i) => document.getElementById(`zikr-${i}`).checked);
+            const countVal = document.getElementById('zikr-count-3').value || '0';
+            
+            data[p][d] = { checks: checks, subhanallahCount: countVal };
+            localStorage.setItem('zikrData', JSON.stringify(data));
+            alert('Zikr progress & count saved successfully!');
+        }
+
+        function save(key, list, prefix, pId, dId) {
+            const p = document.getElementById(pId).value;
+            const d = document.getElementById(dId).value;
+            const data = getData(key);
+            if(!data[p]) data[p] = {};
+            data[p][d] = list.map((_, i) => document.getElementById(`${prefix}-${i}`).checked);
+            localStorage.setItem(key, JSON.stringify(data));
+            alert('Saved successfully!');
+        }
+
+        function loadState() {
+            const p = document.getElementById('personSelect').value;
+            const d = document.getElementById('dateSelect').value;
+            const saved = getData('zikrData')[p]?.[d];
+            
+            const checks = saved?.checks || new Array(zikrs.length).fill(false);
+            zikrs.forEach((_, i) => document.getElementById(`zikr-${i}`).checked = checks[i]);
+            document.getElementById('zikr-count-3').value = saved?.subhanallahCount || '';
+        }
+
+        function loadStateGeneric(key, list, prefix, pId, dId) {
+            const p = document.getElementById(pId).value;
+            const d = document.getElementById(dId).value;
+            const checks = getData(key)[p]?.[d] || new Array(list.length).fill(false);
+            list.forEach((_, i) => document.getElementById(`${prefix}-${i}`).checked = checks[i]);
+        }
+
+        document.getElementById('personSelect').onchange = loadState;
+        document.getElementById('dateSelect').onchange = loadState;
+        document.getElementById('personSelectExtra').onchange = () => loadStateGeneric('extraData', extras, 'extra', 'personSelectExtra', 'dateSelectExtra');
+        document.getElementById('dateSelectExtra').onchange = () => loadStateGeneric('extraData', extras, 'extra', 'personSelectExtra', 'dateSelectExtra');
+        document.getElementById('personSelectNamaaz').onchange = () => loadStateGeneric('namaazData', namaazs, 'namaaz', 'personSelectNamaaz', 'dateSelectNamaaz');
+        document.getElementById('dateSelectNamaaz').onchange = () => loadStateGeneric('namaazData', namaazs, 'namaaz', 'personSelectNamaaz', 'dateSelectNamaaz');
+
+        loadState();
+        loadStateGeneric('extraData', extras, 'extra', 'personSelectExtra', 'dateSelectExtra');
+        loadStateGeneric('namaazData', namaazs, 'namaaz', 'personSelectNamaaz', 'dateSelectNamaaz');
+
+        let chart = null;
+        function drawChart() {
+            const cat = document.getElementById('catSelect').value;
+            const tf = document.getElementById('timeSelect').value;
+            const cards = document.getElementById('cards');
+            cards.innerHTML = '';
+
+            if(cat === 'zikr') {
+                const data = getData('zikrData');
+                const pcts = persons.map(p => {
+                    const pData = data[p] || {};
+                    let comp = 0, poss = 0, now = new Date();
+                    Object.keys(pData).forEach(dStr => {
+                        const d = new Date(dStr);
+                        let inc = false;
+                        if (tf === 'daily' && dStr === today) inc = true;
+                        else if (tf === 'weekly' && Math.abs(now - d) / 86400000 <= 7) inc = true;
+                        else if (tf === 'monthly' && d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear()) inc = true;
+                        else if (tf === 'yearly' && d.getFullYear() === now.getFullYear()) inc = true;
+                        if (inc && pData[dStr].checks) {
+                            pData[dStr].checks.forEach(v => { if(v) comp++; poss++; });
+                        }
+                    });
+                    const pct = poss > 0 ? Math.round((comp / poss) * 100) : 0;
+                    cards.innerHTML += `<div class="theme-box p-3 rounded text-center"><p class="text-xs text-slate-300">${p}</p><p class="text-2xl font-bold theme-title">${pct}%</p></div>`;
+                    return pct;
+                });
+                if (chart) chart.destroy();
+                chart = new Chart(document.getElementById('myChart').getContext('2d'), {
+                    type: 'bar',
+                    data: { labels: persons, datasets: [{ label: 'Zikr Completion %', data: pcts, backgroundColor: ['#ff007f', '#00c8ff', '#b400ff', '#ff8000'], borderRadius: 6 }] },
+                    options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, max: 100 } } }
+                });
+            } else {
+                const key = cat === 'extra' ? 'extraData' : 'namaazData';
+                const list = cat === 'extra' ? extras : namaazs;
+                const data = getData(key);
+                const pcts = persons.map(p => {
+                    const pData = data[p] || {};
+                    let comp = 0, poss = 0, now = new Date();
+                    Object.keys(pData).forEach(dStr => {
+                        const d = new Date(dStr);
+                        let inc = false;
+                        if (tf === 'daily' && dStr === today) inc = true;
+                        else if (tf === 'weekly' && Math.abs(now - d) / 86400000 <= 7) inc = true;
+                        else if (tf === 'monthly' && d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear()) inc = true;
+                        else if (tf === 'yearly' && d.getFullYear() === now.getFullYear()) inc = true;
+                        if (inc && Array.isArray(pData[dStr])) {
+                            pData[dStr].forEach(v => { if(v) comp++; poss++; });
+                        }
+                    });
+                    const pct = poss > 0 ? Math.round((comp / poss) * 100) : 0;
+                    cards.innerHTML += `<div class="theme-box p-3 rounded text-center"><p class="text-xs text-slate-300">${p}</p><p class="text-2xl font-bold theme-title">${pct}%</p></div>`;
+                    return pct;
+                });
+                if (chart) chart.destroy();
+                chart = new Chart(document.getElementById('myChart').getContext('2d'), {
+                    type: 'bar',
+                    data: { labels: persons, datasets: [{ label: 'Completion %', data: pcts, backgroundColor: ['#ff007f', '#00c8ff', '#b400ff', '#ff8000'], borderRadius: 6 }] },
+                    options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, max: 100 } } }
+                });
+            }
+        }
+    </script>
 </body>
 </html>
